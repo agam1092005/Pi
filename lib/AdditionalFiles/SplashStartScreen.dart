@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/LandingPage.dart';
 
-
 class SplashStartScreen extends StatefulWidget {
   const SplashStartScreen({super.key});
 
@@ -15,10 +14,9 @@ class SplashStartScreen extends StatefulWidget {
 }
 
 class _SplashStartScreenState extends State<SplashStartScreen> {
-
   @override
   void initState() {
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 1), () {
       Navigator.of(context, rootNavigator: true).pushReplacement(
         CupertinoPageRoute<bool>(
           fullscreenDialog: false,
@@ -32,26 +30,23 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    return const SafeArea(child: Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              "LabLogic",
-              style: TextStyle(
-                fontSize: 26,
-                color: Colors.white,
-                fontFamily: 'DMSans',
-                fontWeight: FontWeight.w900,
+    return const Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Image(
+                image: AssetImage(
+                  "assets/ll.png",
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }

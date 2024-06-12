@@ -2,6 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-const Color accentColor = Color(0xFF337D73);
-const Color bgColor = Color(0xFFFBEFED);
-const Color secondaryColor = Color(0xFFD86453);
+const Color accentColor = Color(0xFF6FB98F);
+const Color bgColor = Colors.white;
+const Color secondaryColor = Color(0xFFD49C53);

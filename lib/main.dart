@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lablogic/AdditionalFiles/constants.dart';
 
 import 'AdditionalFiles/SplashStartScreen.dart';
 Future<void> main() async {
@@ -9,9 +10,9 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,
     statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.black,
+    systemNavigationBarColor: Colors.white,
     statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarIconBrightness: Brightness.dark,
   ));
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
@@ -35,11 +36,11 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
-          unselectedWidgetColor: Colors.white,
+          scaffoldBackgroundColor: bgColor,
+          unselectedWidgetColor: bgColor,
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.white,
+            backgroundColor: bgColor,
+            surfaceTintColor: bgColor,
           ),
           searchBarTheme: SearchBarThemeData(
             elevation: MaterialStateProperty.all(1),
@@ -49,10 +50,10 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             surfaceTintColor: MaterialStateProperty.all<Color>(
-              Colors.white,
+              bgColor,
             ),
             backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.white,
+              bgColor,
             ),
           )),
       home: const SplashStartScreen(),
