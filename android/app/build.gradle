@@ -25,8 +25,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.lablogic"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 34
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -39,7 +39,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 26
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
@@ -51,9 +51,14 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
-    ndkVersion "25.1.8937393"
+
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 }
