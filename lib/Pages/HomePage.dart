@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 
 import 'dart:ui';
 
@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,9 +19,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
+  var T = "";
+  SpeechToText listener = SpeechToText();
+  bool isListening = false;
+  checkMic() async {
+    bool micAvailable = await listener.initialize();
+
+    if (micAvailable) {
+      print("Mic is available");
+    } else {
+      print("No Mic available");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    checkMic();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -163,7 +178,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          if (isListening) {
+            bool micAvailable = await listener.initialize();
+
+            if (micAvailable) {
+              setState(() {
+                isListening = true;
+              });
+              listener.listen(
+                  listenOptions: SpeechListenOptions(
+                    autoPunctuation: true,
+                    listenMode: ListenMode.dictation,
+                  ),
+                  listenFor: const Duration(seconds: 30),
+                  onResult: (result) {
+                    setState(() {
+                      T = result.recognizedWords;
+                    });
+                  });
+            }
+          }
+          else {
+            setState(() {
+              isListening = false;
+              listener.stop();
+            });
+          }
+        },
         backgroundColor: accentColor,
         child: const Icon(
           Icons.mic,
@@ -211,9 +253,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.all(16),
         child: TabBarView(
           controller: _tabController,
-          children: const [
-            Records(),
-            Text("Notes"),
+          children: [
+            const Records(),
+            Text(T.toString()),
           ],
         ),
       ),

@@ -1,15 +1,14 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:ui';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
+import 'package:lablogic/Pages/HomePage.dart';
 import 'package:rive/rive.dart';
 import 'AdditionalFiles/constants.dart';
-import 'Pages/HomePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -21,7 +20,7 @@ class LandingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: RoundedButton(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context, rootNavigator: true).pushReplacement(
               CupertinoPageRoute<bool>(
                 fullscreenDialog: false,
                 builder: (BuildContext context) => const HomePage(),

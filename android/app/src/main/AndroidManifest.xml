@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <application
         android:label="LabLogic"
         android:name="${applicationName}"
@@ -23,6 +27,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!-- Add the following intent filter for handling the Google Sign-In redirect -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Replace with your own redirect URI scheme -->
+                <data android:scheme="com.googleusercontent.apps.429809952548-c65or9pjv2jvsngg4itk5cdkmmccihts.apps.googleusercontent.com" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
