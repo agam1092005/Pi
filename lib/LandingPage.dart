@@ -2,12 +2,14 @@
 
 import 'dart:ui';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
 import 'package:rive/rive.dart';
 import 'AdditionalFiles/constants.dart';
-import 'HomePage.dart';
+import 'Pages/HomePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -25,14 +27,13 @@ class LandingPage extends StatelessWidget {
                 builder: (BuildContext context) => const HomePage(),
               ),
             );
+            HapticFeedback.selectionClick();
           },
           height: 50,
           width: double.maxFinite,
           child: const Text(
             "Login with Google",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: ButtonTextStyle,
           ),
         ),
       ),
@@ -45,7 +46,8 @@ class LandingPage extends StatelessWidget {
               sigmaX: 25,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 100, horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -54,39 +56,49 @@ class LandingPage extends StatelessWidget {
                     height: MediaQuery.of(context).size.width * 0.6,
                     child: const RiveAnimation.asset("assets/animation"),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const Spacer(),
                   const Text(
                     "Save your time while doing your ",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: SubHeadingTextStyle,
                   ),
-                  RichText(
-                    text: const TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Research & Lab-work',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900,
+                  Row(
+                    children: [
+                      AnimatedTextKit(
+                        repeatForever: true,
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            'Academic Research',
+                            textStyle: HeadingTextStyle,
                           ),
-                        ),
-                        TextSpan(
-                          text: ',',
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: accentColor,
-                            fontWeight: FontWeight.w900,
+                          TypewriterAnimatedText(
+                            'Scientific Research',
+                            textStyle: HeadingTextStyle,
                           ),
-                        ),
-                      ],
-                    ),
+                          TypewriterAnimatedText(
+                            'Lab Work',
+                            textStyle: HeadingTextStyle,
+                          ),
+                          TypewriterAnimatedText(
+                            'Simulation and Modeling',
+                            textStyle: HeadingTextStyle,
+                          ),
+                          TypewriterAnimatedText(
+                            'Data Analysis',
+                            textStyle: HeadingTextStyle,
+                          ),
+                          TypewriterAnimatedText(
+                            'Publication',
+                            textStyle: HeadingTextStyle,
+                          ),
+                        ],
+                      ),
+                      const Text(
+                        ",",
+                        style: CommaTextStyle,
+                      ),
+                    ],
                   ),
+                  const Spacer(),
                 ],
               ),
             ),
