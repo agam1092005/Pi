@@ -8,7 +8,14 @@ import 'AdditionalFiles/SplashStartScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBeB_aRq50hGHAauEEjFCV3vQRQnB2k-i0",
+      appId: "1:429809952548:android:70eeb3ae92b80b926fb5b1",
+      messagingSenderId: "429809952548",
+      projectId: "lablogic1092005",
+    ),
+  );
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,
     statusBarColor: Colors.transparent,
