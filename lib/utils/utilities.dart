@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
-Future<void> Glogin() async {
+Future<GoogleSignInAccount> Glogin() async {
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: ['email'],
   );
@@ -23,7 +23,7 @@ Future<void> Glogin() async {
   );
 
   await auth.signInWithCredential(credential);
-  return;
+  return googleUser;
 }
 
 Map<String, String> jwt = {};

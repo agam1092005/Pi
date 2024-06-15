@@ -1,22 +1,33 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lablogic/AdditionalFiles/rounded_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../AdditionalFiles/constants.dart';
+import '../LandingPage.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+bool biometrics = false;
+
+class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-        Size.fromHeight(MediaQuery.of(context).size.height * 0.125),
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.125),
         child: Container(
           padding: const EdgeInsets.all(16),
           margin:
-          EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
           child: Row(
             children: [
               GestureDetector(
@@ -28,19 +39,283 @@ class Profile extends StatelessWidget {
                   Icons.arrow_back_ios_new_outlined,
                 ),
               ),
-              const SizedBox(
-                width: 20,
-              ),
-              const Text(
-                "Profile",
-                style: AppBarTextStyle,
-              ),
             ],
           ),
         ),
       ),
       body: ListView(
-        children: const [],
+        padding: const EdgeInsets.all(16),
+        children: [
+          const SizedBox(
+            height: 60,
+          ),
+          Text(
+            auth.currentUser!.displayName.toString(),
+            style: HeadingTextStyle,
+          ),
+          Text(
+            auth.currentUser!.email.toString(),
+            style: BasicTextStyle,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(
+                  8,
+                ),
+              ),
+              border: Border.all(
+                color: secondaryColor,
+                width: 2,
+              ),
+            ),
+            width: double.maxFinite,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  "Your Privileges",
+                  style: SubHeadingTextStyle,
+                ),
+                const Text(
+                  "Notebooks - 5",
+                  style: BasicTextStyle,
+                ),
+                const Text(
+                  "No AI 🫡, Let AI do the work for you",
+                  style: BasicTextStyle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                RoundedButton(
+                  onPressed: () {},
+                  height: 40,
+                  width: 100,
+                  child: const Text(
+                    "Learn more",
+                    style: ButtonTextStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Text(
+            "App settings",
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: secondaryColor,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            width: double.maxFinite,
+            child: const ListTile(
+              title: Text(
+                "How to use Pi",
+              ),
+              trailing: Icon(Icons.info_outline_rounded),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: secondaryColor,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            width: double.maxFinite,
+            child: const ListTile(
+              title: Text(
+                "AI features",
+              ),
+              trailing: Icon(Icons.computer_outlined),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: secondaryColor,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            width: double.maxFinite,
+            child: const ListTile(
+              title: Text(
+                "Notifications",
+              ),
+              trailing: Icon(Icons.notifications_active_outlined),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Text(
+            "Security & Privacy",
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: secondaryColor,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            width: double.maxFinite,
+            child: ListTile(
+              title: const Text(
+                "Unlock with biometrics",
+              ),
+              trailing: CupertinoSwitch(
+                  value: biometrics,
+                  onChanged: (val) {
+                    setState(() {
+                      biometrics = !biometrics;
+                    });
+                  }),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          GestureDetector(
+            onTap: () async {
+              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              await auth.signOut();
+              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                CupertinoPageRoute<bool>(
+                  fullscreenDialog: false,
+                  builder: (BuildContext context) => const LandingPage(),
+                ),
+                    (Route<dynamic> route) => false,
+              );
+              prefs.clear();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: secondaryColor,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(4),
+                ),
+              ),
+              width: double.maxFinite,
+              child: const ListTile(
+                title: Text(
+                  "Logout",
+                ),
+                trailing: Icon(Icons.logout),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.red,
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+              ),
+            ),
+            width: double.maxFinite,
+            child: const ListTile(
+              title: Text(
+                "Delete Account",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              trailing: Icon(
+                Icons.backspace_outlined,
+                color: Colors.red,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Text(
+            "Nerd Stuff",
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(
+                  8,
+                ),
+              ),
+              border: Border.all(
+                color: secondaryColor,
+                width: 2,
+              ),
+            ),
+            width: double.maxFinite,
+            padding: const EdgeInsets.all(16),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "V 1.0.0",
+                  style: SubHeadingTextStyle,
+                ),
+                Wrap(
+                  spacing: 5,
+                  children: [
+                    Chip(
+                      label: Text("What's new?"),
+                    ),
+                    Chip(
+                      label: Text("Privacy Policy"),
+                    ),
+                    Chip(
+                      label: Text("Report an error"),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

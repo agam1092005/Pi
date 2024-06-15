@@ -26,13 +26,11 @@ class _RecordsState extends State<Records> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Center(
-                      child: Icon(
-                        Icons.mic,
-                        color: secondaryColor,
+                      child: Text(
+                        "The reaction evolved flame red in colour and rats were unconscious with the flame",
+                        style: SpeechTextStyle,
                       ),
                     ),
-                    Text(
-                        "|||||       |||||||| |||||||||||||||   |||| |||||||||   |||||    |||"),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Icon(

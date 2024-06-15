@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/LandingPage.dart';
+import 'package:lablogic/Pages/HomePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashStartScreen extends StatefulWidget {
   const SplashStartScreen({super.key});
@@ -14,13 +16,23 @@ class SplashStartScreen extends StatefulWidget {
 }
 
 class _SplashStartScreenState extends State<SplashStartScreen> {
+
+  var loggedIn = false;
+
+  getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    loggedIn = prefs.getBool("loggedIn")!;
+  }
+
+
   @override
   void initState() {
+    getData();
     Timer(const Duration(seconds: 1), () {
       Navigator.of(context, rootNavigator: true).pushReplacement(
         CupertinoPageRoute<bool>(
           fullscreenDialog: false,
-          builder: (BuildContext context) => const LandingPage(),
+          builder: (BuildContext context) => (loggedIn) ? const HomePage() : const LandingPage(),
         ),
       );
       HapticFeedback.selectionClick();
@@ -30,6 +42,9 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getData();
+    });
     return const Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 60, horizontal: 16),

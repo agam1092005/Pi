@@ -2,12 +2,15 @@
 
 import 'dart:ui';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
 import 'package:lablogic/utils/utilities.dart';
 import 'package:rive/rive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AdditionalFiles/constants.dart';
+import 'Pages/HomePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -19,13 +22,15 @@ class LandingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: RoundedButton(
           onPressed: () async {
-            await Glogin();
-            // Navigator.of(context, rootNavigator: true).pushReplacement(
-            //   CupertinoPageRoute<bool>(
-            //     fullscreenDialog: false,
-            //     builder: (BuildContext context) => const HomePage(),
-            //   ),
-            // );
+           await Glogin();
+            final SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("loggedIn", true);
+            Navigator.of(context, rootNavigator: true).pushReplacement(
+              CupertinoPageRoute<bool>(
+                fullscreenDialog: false,
+                builder: (BuildContext context) => const HomePage(),
+              ),
+            );
             HapticFeedback.selectionClick();
           },
           height: 50,

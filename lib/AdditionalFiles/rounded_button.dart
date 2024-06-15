@@ -25,7 +25,7 @@ class RoundedButton extends StatelessWidget {
       color: secondaryColor,
       borderRadius: const BorderRadius.all(
         Radius.circular(
-          12,
+          8,
         ),
       ),
       child: MaterialButton(

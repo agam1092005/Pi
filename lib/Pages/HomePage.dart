@@ -1,11 +1,11 @@
 // ignore_for_file: file_names, avoid_print
 
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
+import 'package:lablogic/Pages/Notes.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -88,7 +88,50 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           children: [
                             const Text(
                               "Notebooks",
-                              style: AppBarTextStyle,
+                              style: SubHeadingTextStyle,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Wrap(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.red,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.blueAccent,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.greenAccent,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.yellow,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.grey,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  color: Colors.green,
+                                  height: 120,
+                                  width: 90,
+                                ),
+                              ],
                             ),
                             const Spacer(),
                             Align(
@@ -141,6 +184,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       bottomNavigationBar: DefaultTabController(
         length: 2,
         child: TabBar(
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              return Colors.transparent;
+            },
+          ),
           padding: const EdgeInsets.only(bottom: 16),
           controller: _tabController,
           dividerHeight: 0,
@@ -198,9 +247,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     });
                   });
             }
-
-          }
-          else {
+          } else {
             setState(() {
               isListening = false;
               listener.stop();
@@ -233,7 +280,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 },
                 child: const Text(
                   "• Amoeba Research",
-                  style: AppBarTextStyle,
+                  style: SubHeadingTextStyle,
                 ),
               ),
               GestureDetector(
@@ -246,7 +293,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   );
                   HapticFeedback.selectionClick();
                 },
-                child: const CircleAvatar(),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    auth.currentUser!.photoURL.toString(),
+                  ),
+                ),
               ),
             ],
           ),
@@ -256,9 +307,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.all(16),
         child: TabBarView(
           controller: _tabController,
-          children: [
-            const Records(),
-            Text(T.toString()),
+          children: const [
+            Records(),
+            Notes(),
           ],
         ),
       ),
