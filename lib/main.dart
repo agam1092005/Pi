@@ -4,17 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
+import 'package:lablogic/firebase_options.dart';
 import 'AdditionalFiles/SplashStartScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyBeB_aRq50hGHAauEEjFCV3vQRQnB2k-i0",
-      appId: "1:429809952548:android:70eeb3ae92b80b926fb5b1",
-      messagingSenderId: "429809952548",
-      projectId: "lablogic1092005",
-    ),
+    options: DefaultFirebaseOptions.android,
   );
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,

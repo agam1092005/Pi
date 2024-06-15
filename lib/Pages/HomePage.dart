@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
-  var T = "";
+  String T = "Please speak";
   SpeechToText listener = SpeechToText();
   bool isListening = false;
   checkMic() async {
@@ -179,17 +179,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (isListening) {
+          if (!isListening) {
             bool micAvailable = await listener.initialize();
 
             if (micAvailable) {
               setState(() {
                 isListening = true;
               });
+              print(isListening);
               listener.listen(
                   listenOptions: SpeechListenOptions(
                     autoPunctuation: true,
-                    listenMode: ListenMode.dictation,
                   ),
                   listenFor: const Duration(seconds: 30),
                   onResult: (result) {
@@ -198,13 +198,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     });
                   });
             }
+
           }
           else {
             setState(() {
               isListening = false;
               listener.stop();
+              print(isListening);
             });
           }
+          setState(() {});
         },
         backgroundColor: accentColor,
         child: const Icon(

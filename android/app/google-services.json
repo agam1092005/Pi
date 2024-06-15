@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "429809952548",
-    "project_id": "lablogic1092005",
-    "storage_bucket": "lablogic1092005.appspot.com"
+    "project_number": "284923352933",
+    "project_id": "pi-lablogic-c06bd",
+    "storage_bucket": "pi-lablogic-c06bd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:429809952548:android:70eeb3ae92b80b926fb5b1",
+        "mobilesdk_app_id": "1:284923352933:android:7e931582144e09d3d6738c",
         "android_client_info": {
-          "package_name": "com.example.lablogic"
+          "package_name": "com.lablogic.pi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "429809952548-5aqgjo1ti19qpuflphfc346grgruaakt.apps.googleusercontent.com",
+          "client_id": "284923352933-8erubotk8htii1ki36g2aaoqp9js97dj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.lablogic",
+            "package_name": "com.lablogic.pi",
             "certificate_hash": "67c10db6493e68b1fb99fdadb7192844b028de27"
           }
         },
         {
-          "client_id": "429809952548-15ipoaqeg165g8tstpjn3q4l3bsb0d3l.apps.googleusercontent.com",
+          "client_id": "284923352933-fugftebdgvpjnqv0p2pri16cbjl0ch24.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBeB_aRq50hGHAauEEjFCV3vQRQnB2k-i0"
+          "current_key": "AIzaSyCLRP2M-QGEMhrzitMb0Z2giTC5wJigIAM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "429809952548-15ipoaqeg165g8tstpjn3q4l3bsb0d3l.apps.googleusercontent.com",
+              "client_id": "284923352933-fugftebdgvpjnqv0p2pri16cbjl0ch24.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

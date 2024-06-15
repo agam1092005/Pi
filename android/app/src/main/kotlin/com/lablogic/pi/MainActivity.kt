@@ -1,4 +1,4 @@
-package com.example.lablogic
+package com.lablogic.pi
 
 import io.flutter.embedding.android.FlutterActivity
 
