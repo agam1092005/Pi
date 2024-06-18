@@ -8,7 +8,8 @@ import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/Pages/Notes.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:vosk_flutter/vosk_flutter.dart';
+import 'dart:math' as math;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,22 +21,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
   String T = "Please speak";
-  SpeechToText listener = SpeechToText();
-  bool isListening = false;
-  checkMic() async {
-    bool micAvailable = await listener.initialize();
 
-    if (micAvailable) {
-      print("Mic is available");
-    } else {
-      print("No Mic available");
-    }
-  }
+  bool isListening = false;
 
   @override
   void initState() {
     super.initState();
-    checkMic();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -94,42 +85,82 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               height: 10,
                             ),
                             Wrap(
+                              spacing: MediaQuery.of(context).size.width * 0.025,
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.red,
-                                  height: 120,
-                                  width: 90,
+                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt(),
+                                    ).withOpacity(1.0),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 100,
+                                  width: 80,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.blueAccent,
-                                  height: 120,
-                                  width: 90,
+                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt(),
+                                    ).withOpacity(1.0),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 100,
+                                  width: 80,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.greenAccent,
-                                  height: 120,
-                                  width: 90,
+                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt(),
+                                    ).withOpacity(1.0),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 100,
+                                  width: 80,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.yellow,
-                                  height: 120,
-                                  width: 90,
+                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt(),
+                                    ).withOpacity(1.0),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 100,
+                                  width: 80,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.grey,
-                                  height: 120,
-                                  width: 90,
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.all(16),
-                                  color: Colors.green,
-                                  height: 120,
-                                  width: 90,
+                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt(),
+                                    ).withOpacity(1.0),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 100,
+                                  width: 80,
                                 ),
                               ],
                             ),
@@ -229,28 +260,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (!isListening) {
-            bool micAvailable = await listener.initialize();
+            final model = await ModelLoader().loadFromAssets(
+                'assets/models/vosk-model-small-en-us-0.15.zip');
+            final vosk = VoskFlutterPlugin.instance();
 
-            if (micAvailable) {
-              setState(() {
-                isListening = true;
-              });
-              print(isListening);
-              listener.listen(
-                  listenOptions: SpeechListenOptions(
-                    autoPunctuation: true,
-                  ),
-                  listenFor: const Duration(seconds: 30),
-                  onResult: (result) {
-                    setState(() {
-                      T = result.recognizedWords;
-                    });
-                  });
-            }
+            final recognizer = await vosk.createRecognizer(
+              model: model as Model,
+              sampleRate: 1600,
+            );
+            final speechService = await vosk.initSpeechService(recognizer);
+            speechService.onPartial().forEach((partial) => print(partial));
+            speechService.onResult().forEach((result) => print(result));
+            await speechService.start();
           } else {
             setState(() {
               isListening = false;
-              listener.stop();
               print(isListening);
             });
           }
