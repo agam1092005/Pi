@@ -16,13 +16,24 @@ const ButtonTextStyle = TextStyle(
 );
 
 const BasicTextStyle = TextStyle(
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w400,
   color: Colors.black,
+);
+
+const BasicTextStyle2 = TextStyle(
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
 );
 
 const SubHeadingTextStyle = TextStyle(
   fontSize: 20,
   color: Colors.black,
+  fontWeight: FontWeight.bold,
+);
+
+const SubHeadingTextStyle2 = TextStyle(
+  fontSize: 20,
+  color: Colors.white,
   fontWeight: FontWeight.bold,
 );
 

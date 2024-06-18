@@ -1,9 +1,10 @@
-// ignore_for_file: file_names, use_build_context_synchronously
+// ignore_for_file: file_names, use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdditionalFiles/constants.dart';
 import '../LandingPage.dart';
@@ -15,9 +16,25 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-bool biometrics = false;
+var biometrics = false;
 
 class _ProfileState extends State<Profile> {
+  late final LocalAuthentication Lauth;
+  bool supportState = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Lauth = LocalAuthentication();
+    Lauth.isDeviceSupported().then(
+      (bool isSupported) => setState(
+        () {
+          supportState = isSupported;
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,34 +79,34 @@ class _ProfileState extends State<Profile> {
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  secondaryColor,
+                  secondaryColor.withOpacity(0.75),
+                  secondaryColor.withOpacity(0.5),
+                ],
+              ),
               borderRadius: const BorderRadius.all(
                 Radius.circular(
                   8,
                 ),
               ),
-              border: Border.all(
-                color: secondaryColor,
-                width: 2,
-              ),
             ),
             width: double.maxFinite,
             padding: const EdgeInsets.all(16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Your Privileges",
-                  style: SubHeadingTextStyle,
+                  "Free Tier",
+                  style: SubHeadingTextStyle2,
                 ),
                 const Text(
-                  "Notebooks - 5",
-                  style: BasicTextStyle,
-                ),
-                const Text(
-                  "No AI 🫡, Let AI do the work for you",
-                  style: BasicTextStyle,
+                  "Get more notebooks, AI access and much more",
+                  style: BasicTextStyle2,
                 ),
                 const SizedBox(
                   height: 10,
@@ -97,9 +114,9 @@ class _ProfileState extends State<Profile> {
                 RoundedButton(
                   onPressed: () {},
                   height: 40,
-                  width: 100,
+                  width: double.maxFinite,
                   child: const Text(
-                    "Learn more",
+                    "View All Plans",
                     style: ButtonTextStyle,
                   ),
                 ),
@@ -196,13 +213,28 @@ class _ProfileState extends State<Profile> {
               title: const Text(
                 "Unlock with biometrics",
               ),
-              trailing: CupertinoSwitch(
-                  value: biometrics,
-                  onChanged: (val) {
-                    setState(() {
-                      biometrics = !biometrics;
-                    });
-                  }),
+              trailing: (supportState)
+                  ? CupertinoSwitch(
+                      value: biometrics,
+                      onChanged: (val) {
+                        setState(() {
+                          biometrics = !biometrics;
+                        });
+                      })
+                  : GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Device not supported for biometrics"),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.warning_amber_outlined,
+                        color: Colors.yellow,
+                      ),
+                    ),
             ),
           ),
           const SizedBox(
@@ -210,14 +242,15 @@ class _ProfileState extends State<Profile> {
           ),
           GestureDetector(
             onTap: () async {
-              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
               await auth.signOut();
               Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                 CupertinoPageRoute<bool>(
                   fullscreenDialog: false,
                   builder: (BuildContext context) => const LandingPage(),
                 ),
-                    (Route<dynamic> route) => false,
+                (Route<dynamic> route) => false,
               );
               prefs.clear();
             },
@@ -277,15 +310,11 @@ class _ProfileState extends State<Profile> {
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: secondaryColor.withOpacity(0.5),
               borderRadius: const BorderRadius.all(
                 Radius.circular(
                   8,
                 ),
-              ),
-              border: Border.all(
-                color: secondaryColor,
-                width: 2,
               ),
             ),
             width: double.maxFinite,
@@ -302,13 +331,25 @@ class _ProfileState extends State<Profile> {
                   spacing: 5,
                   children: [
                     Chip(
-                      label: Text("What's new?"),
+                      label: Text(
+                        "What's new?",
+                        style: BasicTextStyle2,
+                      ),
+                      backgroundColor: secondaryColor,
                     ),
                     Chip(
-                      label: Text("Privacy Policy"),
+                      label: Text(
+                        "Privacy Policy",
+                        style: BasicTextStyle2,
+                      ),
+                      backgroundColor: secondaryColor,
                     ),
                     Chip(
-                      label: Text("Report an error"),
+                      label: Text(
+                        "Report an error",
+                        style: BasicTextStyle2,
+                      ),
+                      backgroundColor: secondaryColor,
                     ),
                   ],
                 )

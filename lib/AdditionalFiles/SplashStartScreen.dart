@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/LandingPage.dart';
 import 'package:lablogic/Pages/HomePage.dart';
+import 'package:lablogic/Pages/Profile.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashStartScreen extends StatefulWidget {
@@ -16,7 +18,6 @@ class SplashStartScreen extends StatefulWidget {
 }
 
 class _SplashStartScreenState extends State<SplashStartScreen> {
-
   var loggedIn = false;
 
   getData() async {
@@ -24,17 +25,52 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
     loggedIn = prefs.getBool("loggedIn")!;
   }
 
+  late final LocalAuthentication auth;
+
+  Future<void> _authentication() async {
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: '',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+          sensitiveTransaction: false,
+        ),
+      );
+      (authenticated)
+          ? Navigator.of(context, rootNavigator: true).pushReplacement(
+              CupertinoPageRoute<bool>(
+                fullscreenDialog: false,
+                builder: (BuildContext context) =>
+                    (loggedIn) ? const HomePage() : const LandingPage(),
+              ),
+            )
+          : null;
+    } on PlatformException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
+    auth = LocalAuthentication();
     getData();
     Timer(const Duration(seconds: 1), () {
-      Navigator.of(context, rootNavigator: true).pushReplacement(
-        CupertinoPageRoute<bool>(
-          fullscreenDialog: false,
-          builder: (BuildContext context) => (loggedIn) ? const HomePage() : const LandingPage(),
-        ),
-      );
+      (biometrics)
+          ? _authentication()
+          : Navigator.of(context, rootNavigator: true).pushReplacement(
+              CupertinoPageRoute<bool>(
+                fullscreenDialog: false,
+                builder: (BuildContext context) =>
+                    (loggedIn) ? const HomePage() : const LandingPage(),
+              ),
+            );
       HapticFeedback.selectionClick();
     });
     super.initState();
