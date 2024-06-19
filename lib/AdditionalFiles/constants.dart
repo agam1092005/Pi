@@ -1,14 +1,12 @@
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, file_names
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-final FirebaseAuth auth = FirebaseAuth.instance;
 
 const Color accentColor = Color(0xFF6FB98F);
 const Color bgColor = Colors.white;
 const Color secondaryColor = Color(0xFF21394B);
 
+var UserData;
 
 const ButtonTextStyle = TextStyle(
   fontWeight: FontWeight.bold,

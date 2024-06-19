@@ -8,6 +8,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdditionalFiles/constants.dart';
 import '../LandingPage.dart';
+import '../utils/utilities.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -16,15 +17,22 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-var biometrics = false;
-
 class _ProfileState extends State<Profile> {
   late final LocalAuthentication Lauth;
   bool supportState = false;
 
+  late bool biometrics;
+
+  getData() async {
+    final SharedPreferences prefs =
+    await SharedPreferences.getInstance();
+    biometrics = prefs.getBool('bio')!;
+  }
+
   @override
   void initState() {
     super.initState();
+    getData();
     Lauth = LocalAuthentication();
     Lauth.isDeviceSupported().then(
       (bool isSupported) => setState(
@@ -37,6 +45,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getData();
+    });
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -216,10 +227,13 @@ class _ProfileState extends State<Profile> {
               trailing: (supportState)
                   ? CupertinoSwitch(
                       value: biometrics,
-                      onChanged: (val) {
+                      onChanged: (val) async {
                         setState(() {
                           biometrics = !biometrics;
                         });
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setBool('bio', biometrics);
                       })
                   : GestureDetector(
                       onTap: () {

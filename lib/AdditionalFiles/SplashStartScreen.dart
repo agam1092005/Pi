@@ -4,9 +4,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/LandingPage.dart';
 import 'package:lablogic/Pages/HomePage.dart';
-import 'package:lablogic/Pages/Profile.dart';
+import 'package:lablogic/utils/utilities.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,11 +19,14 @@ class SplashStartScreen extends StatefulWidget {
 }
 
 class _SplashStartScreenState extends State<SplashStartScreen> {
-  var loggedIn = false;
+  var jwt;
+  var biometrics = false;
 
   getData() async {
+    await refreshData();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    loggedIn = prefs.getBool("loggedIn")!;
+    jwt = prefs.getString('jwt');
+    biometrics = prefs.getBool('bio')!;
   }
 
   late final LocalAuthentication auth;
@@ -42,7 +46,7 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
               CupertinoPageRoute<bool>(
                 fullscreenDialog: false,
                 builder: (BuildContext context) =>
-                    (loggedIn) ? const HomePage() : const LandingPage(),
+                    (jwt != null) ? const HomePage() : const LandingPage(),
               ),
             )
           : null;
@@ -68,7 +72,7 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
               CupertinoPageRoute<bool>(
                 fullscreenDialog: false,
                 builder: (BuildContext context) =>
-                    (loggedIn) ? const HomePage() : const LandingPage(),
+                    (jwt != null) ? const HomePage() : const LandingPage(),
               ),
             );
       HapticFeedback.selectionClick();

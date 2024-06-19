@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../AdditionalFiles/constants.dart';
+
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 Future<GoogleSignInAccount> Glogin() async {
@@ -25,6 +27,7 @@ Future<GoogleSignInAccount> Glogin() async {
   await auth.signInWithCredential(credential);
   return googleUser;
 }
+
 
 Map<String, String> jwt = {};
 Future verifyUser(email) async {
@@ -61,6 +64,8 @@ void updateCookie(http.Response response) async {
   prefs.setString('jwt', jwt['cookie']!);
 }
 
+
+
 Future getUserData(
     ) async {
   final url =
@@ -81,4 +86,9 @@ Future getUserData(
 
   final responseBody = jsonDecode(response.body);
   return [response.statusCode, responseBody];
+}
+
+refreshData() async {
+  var response = await getUserData();
+  UserData = response[1];
 }

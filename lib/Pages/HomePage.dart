@@ -11,6 +11,8 @@ import 'package:lablogic/Pages/Records.dart';
 import 'package:vosk_flutter/vosk_flutter.dart';
 import 'dart:math' as math;
 
+import '../utils/utilities.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -87,21 +89,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             Wrap(
                               spacing: MediaQuery.of(context).size.width * 0.025,
                               children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
-                                          .toInt(),
-                                    ).withOpacity(1.0),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
+                                    decoration: BoxDecoration(
+                                      color: Color(
+                                        (math.Random().nextDouble() * 0xFFFFFF)
+                                            .toInt(),
+                                      ).withOpacity(1.0),
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        bottomRight: Radius.circular(8),
+                                      ),
                                     ),
+                                    height: 100,
+                                    width: 80,
                                   ),
-                                  height: 100,
-                                  width: 80,
-                                ),
                                 Container(
                                   margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
                                   decoration: BoxDecoration(

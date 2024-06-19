@@ -5,11 +5,11 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
 import 'package:lablogic/utils/utilities.dart';
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'AdditionalFiles/constants.dart';
 import 'Pages/HomePage.dart';
 
 class LandingPage extends StatelessWidget {
@@ -22,15 +22,32 @@ class LandingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: RoundedButton(
           onPressed: () async {
-           await Glogin();
-            final SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setBool("loggedIn", true);
-            Navigator.of(context, rootNavigator: true).pushReplacement(
-              CupertinoPageRoute<bool>(
-                fullscreenDialog: false,
-                builder: (BuildContext context) => const HomePage(),
-              ),
-            );
+            await Glogin();
+            var response = await verifyUser(auth.currentUser!.email.toString());
+            var statusCode = response[0];
+            var message = response[1];
+            if (statusCode == 200 || statusCode == 201) {
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              await prefs.setBool("loggedIn", true);
+              prefs.setBool('bio', false);
+              await refreshData();
+              Navigator.of(context, rootNavigator: true).pushReplacement(
+                CupertinoPageRoute<bool>(
+                  fullscreenDialog: false,
+                  builder: (BuildContext context) => const HomePage(),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    message['message'],
+                  ),
+                ),
+              );
+            }
+
             HapticFeedback.selectionClick();
           },
           height: 50,
