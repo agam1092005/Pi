@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
+import 'package:lablogic/Pages/SubPages/AiFeatures.dart';
+import 'package:lablogic/Pages/SubPages/HowToUse.dart';
+import 'package:lablogic/Pages/SubPages/Notification.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdditionalFiles/constants.dart';
@@ -143,63 +146,93 @@ class _ProfileState extends State<Profile> {
           const SizedBox(
             height: 5,
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: secondaryColor,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute<bool>(
+                  fullscreenDialog: false,
+                  builder: (BuildContext context) => const HowToUse(),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: secondaryColor,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
               ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
+              width: double.maxFinite,
+              child: const ListTile(
+                title: Text(
+                  "How to use Pi",
+                ),
+                trailing: Icon(Icons.info_outline_rounded),
               ),
-            ),
-            width: double.maxFinite,
-            child: const ListTile(
-              title: Text(
-                "How to use Pi",
-              ),
-              trailing: Icon(Icons.info_outline_rounded),
             ),
           ),
           const SizedBox(
             height: 5,
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: secondaryColor,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute<bool>(
+                  fullscreenDialog: false,
+                  builder: (BuildContext context) => const AiFeatures(),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: secondaryColor,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
               ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
+              width: double.maxFinite,
+              child: const ListTile(
+                title: Text(
+                  "AI features",
+                ),
+                trailing: Icon(Icons.computer_outlined),
               ),
-            ),
-            width: double.maxFinite,
-            child: const ListTile(
-              title: Text(
-                "AI features",
-              ),
-              trailing: Icon(Icons.computer_outlined),
             ),
           ),
           const SizedBox(
             height: 5,
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: secondaryColor,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
-            width: double.maxFinite,
-            child: const ListTile(
-              title: Text(
-                "Notifications",
-              ),
-              trailing: Icon(Icons.notifications_active_outlined),
-            ),
-          ),
+         GestureDetector(
+           onTap: () {
+             Navigator.of(context, rootNavigator: true).push(
+               CupertinoPageRoute<bool>(
+                 fullscreenDialog: false,
+                 builder: (BuildContext context) => const NotificationSettings(),
+               ),
+             );
+           },
+           child:  Container(
+             decoration: BoxDecoration(
+               border: Border.all(
+                 color: secondaryColor,
+               ),
+               borderRadius: const BorderRadius.all(
+                 Radius.circular(8),
+               ),
+             ),
+             width: double.maxFinite,
+             child: const ListTile(
+               title: Text(
+                 "Notifications",
+               ),
+               trailing: Icon(Icons.notifications_active_outlined),
+             ),
+           ),
+         ),
           const SizedBox(
             height: 40,
           ),
@@ -228,12 +261,12 @@ class _ProfileState extends State<Profile> {
                   ? CupertinoSwitch(
                       value: biometrics,
                       onChanged: (val) async {
+                        final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                         setState(() {
                           biometrics = !biometrics;
+                          prefs.setBool('bio', biometrics);
                         });
-                        final SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.setBool('bio', biometrics);
                       })
                   : GestureDetector(
                       onTap: () {

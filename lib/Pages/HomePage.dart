@@ -225,6 +225,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           padding: const EdgeInsets.only(bottom: 16),
           controller: _tabController,
+          onTap: (val) {
+            setState(() {});
+          },
           dividerHeight: 0,
           splashBorderRadius: BorderRadius.zero,
           dividerColor: Colors.transparent,
@@ -259,7 +262,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: (_tabController?.index == 0) ? FloatingActionButton(
         onPressed: () async {
           if (!isListening) {
             final model = await ModelLoader().loadFromAssets(
@@ -283,11 +286,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           setState(() {});
         },
         backgroundColor: accentColor,
+        enableFeedback: true,
         child: const Icon(
           Icons.mic,
           color: Colors.white,
         ),
-      ),
+      ) : null,
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.125),

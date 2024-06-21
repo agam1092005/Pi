@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names, file_names
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, file_names, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 

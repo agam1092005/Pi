@@ -1,10 +1,10 @@
-// ignore_for_file: file_names, invalid_use_of_visible_for_testing_member, prefer_typing_uninitialized_variables
+// ignore_for_file: file_names, invalid_use_of_visible_for_testing_member, prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lablogic/AdditionalFiles/constants.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:lablogic/LandingPage.dart';
 import 'package:lablogic/Pages/HomePage.dart';
 import 'package:lablogic/utils/utilities.dart';
@@ -23,6 +23,7 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
   var biometrics = false;
 
   getData() async {
+    await FlutterDisplayMode.setHighRefreshRate();
     await refreshData();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     jwt = prefs.getString('jwt');
