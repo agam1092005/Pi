@@ -1,9 +1,10 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 
 class Notes extends StatefulWidget {
-  const Notes({super.key});
+  final notebook;
+  const Notes({super.key, required this.notebook});
 
   @override
   State<Notes> createState() => _NotesState();

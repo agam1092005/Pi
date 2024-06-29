@@ -91,7 +91,52 @@ class _ProfileState extends State<Profile> {
           const SizedBox(
             height: 20,
           ),
-          Container(
+          (UserData['premium']) ? Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  secondaryColor,
+                  secondaryColor.withOpacity(0.75),
+                  secondaryColor.withOpacity(0.5),
+                ],
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(
+                  8,
+                ),
+              ),
+            ),
+            width: double.maxFinite,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Hurrayyy",
+                  style: SubHeadingTextStyle2,
+                ),
+                const Text(
+                  "You are getting all the benefits :)",
+                  style: ButtonTextStyle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                RoundedButton(
+                  onPressed: () {},
+                  height: 40,
+                  width: double.maxFinite,
+                  child: const Text(
+                    "Learn more",
+                    style: ButtonTextStyle,
+                  ),
+                ),
+              ],
+            ),
+          ) : Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,

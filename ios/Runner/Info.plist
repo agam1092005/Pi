@@ -6,6 +6,12 @@
     <key>NSFaceIDUsageDescription</key>
     <string>Why is my app authenticating using face id?</string>
 
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need your microphone to provide speech recognition functionality.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>We need speech recognition to provide speech-to-text functionality.</string>
+
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

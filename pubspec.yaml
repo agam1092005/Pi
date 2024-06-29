@@ -14,13 +14,13 @@ dependencies:
 
   cupertino_icons: ^1.0.6
   shared_preferences: ^2.2.3
-  firebase_auth: ^5.1.0
-  firebase_core: ^3.1.0
+  firebase_auth: ^5.1.1
+  firebase_core: ^3.1.1
   google_sign_in: ^6.2.1
   rive: ^0.13.7
   animated_text_kit: ^4.2.2
   http: ^0.13.4
-  vosk_flutter: ^0.3.48
+  flutter_speech: ^2.0.0
   local_auth: ^2.2.0
   flutter_displaymode: ^0.6.0
 

@@ -28,7 +28,6 @@ Future<GoogleSignInAccount> Glogin() async {
   return googleUser;
 }
 
-
 Map<String, String> jwt = {};
 Future verifyUser(email) async {
   final url = Uri.parse('http://10.0.2.2:3333/api/auth/verify');
@@ -64,8 +63,6 @@ void updateCookie(http.Response response) async {
   prefs.setString('jwt', jwt['cookie']!);
 }
 
-
-
 Future getUserData(
     ) async {
   final url =
@@ -91,4 +88,53 @@ Future getUserData(
 refreshData() async {
   var response = await getUserData();
   UserData = response[1];
+}
+
+Future createNotebook(records, research, userId) async {
+  final url = Uri.parse('http://10.0.2.2:3333/api/create');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var cookie = prefs.getString('jwt');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'Cookie': cookie.toString()
+  };
+
+  final body = jsonEncode({
+    "records": records,
+    "research": research,
+    'userId': userId
+  });
+
+  final response = await http.post(
+    url,
+    headers: headers,
+    body: body,
+  );
+
+  final responseBody = jsonDecode(response.body);
+  return [response.statusCode, responseBody];
+}
+
+Future getNotebookData(
+    ) async {
+  final url =
+  Uri.parse('http://10.0.2.2:3333/api/notebook/notebooks');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var cookie = prefs.getString('jwt');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'Cookie': cookie.toString()
+  };
+
+  final response = await http.get(
+    url,
+    headers: headers,
+  );
+
+  final responseBody = jsonDecode(response.body);
+  return [response.statusCode, responseBody];
 }

@@ -1,14 +1,14 @@
-// ignore_for_file: file_names, avoid_print
+// ignore_for_file: file_names, avoid_print, prefer_typing_uninitialized_variables
 
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speech/flutter_speech.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/Pages/Notes.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
-import 'package:vosk_flutter/vosk_flutter.dart';
 import 'dart:math' as math;
 
 import '../utils/utilities.dart';
@@ -22,14 +22,44 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
-  String T = "Please speak";
 
-  bool isListening = false;
+  var selectedNotebook;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+  String transcription = "Please speak";
+
+  late SpeechRecognition _speechRecognition;
+  bool _isAvailable = false;
+  bool _isListening = false;
+
+  void activateSpeechRecognizer() {
+    _speechRecognition = SpeechRecognition();
+    _speechRecognition.setAvailabilityHandler(
+        (bool result) => setState(() => _isAvailable = result));
+    _speechRecognition.setRecognitionStartedHandler(
+        () => setState(() => _isListening = true));
+    _speechRecognition.setRecognitionResultHandler(
+        (String text) => setState(() => transcription = text));
+    _speechRecognition.setRecognitionCompleteHandler(
+        (String text) => setState(() => _isListening = false));
+
+    _speechRecognition
+        .activate('en_US')
+        .then((result) => setState(() => _isAvailable = result));
+  }
+
+  void toggleListening() {
+    if (_isListening) {
+      _speechRecognition
+          .stop()
+          .then((result) => setState(() => _isListening = false));
+    } else {
+      if (_isAvailable) {
+        _speechRecognition.listen().then((result) => print('$result'));
+      }
+    }
+    setState(() {
+      _isListening = !_isListening;
+    });
   }
 
   void showTopModalSheet(BuildContext context) {
@@ -87,86 +117,52 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               height: 10,
                             ),
                             Wrap(
-                              spacing: MediaQuery.of(context).size.width * 0.025,
-                              children: [
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                    decoration: BoxDecoration(
-                                      color: Color(
-                                        (math.Random().nextDouble() * 0xFFFFFF)
-                                            .toInt(),
-                                      ).withOpacity(1.0),
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(8),
-                                        bottomRight: Radius.circular(8),
+                              spacing:
+                                  MediaQuery.of(context).size.width * 0.025,
+                              children: UserData['notebooks']
+                                  .map<Widget>(
+                                    (e) => Container(
+                                      margin: EdgeInsets.only(
+                                        bottom:
+                                            MediaQuery.of(context).size.width *
+                                                0.025,
                                       ),
+                                      decoration: BoxDecoration(
+                                        color: Color(
+                                          (math.Random().nextDouble() *
+                                                  0xFFFFFF)
+                                              .toInt(),
+                                        ).withOpacity(1.0),
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(8),
+                                          bottomRight: Radius.circular(8),
+                                        ),
+                                      ),
+                                      height: 100,
+                                      width: 80,
                                     ),
-                                    height: 100,
-                                    width: 80,
-                                  ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
-                                          .toInt(),
-                                    ).withOpacity(1.0),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
-                                    ),
-                                  ),
-                                  height: 100,
-                                  width: 80,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
-                                          .toInt(),
-                                    ).withOpacity(1.0),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
-                                    ),
-                                  ),
-                                  height: 100,
-                                  width: 80,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
-                                          .toInt(),
-                                    ).withOpacity(1.0),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
-                                    ),
-                                  ),
-                                  height: 100,
-                                  width: 80,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.025,),
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
-                                          .toInt(),
-                                    ).withOpacity(1.0),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
-                                    ),
-                                  ),
-                                  height: 100,
-                                  width: 80,
-                                ),
-                              ],
+                                  )
+                                  .toList(),
                             ),
                             const Spacer(),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: FloatingActionButton(
+                                backgroundColor: accentColor,
+                                onPressed: () async {
+                                  var response = await createNotebook(
+                                    [],
+                                    "Not enough records to generate Research",
+                                    UserData['_id'],
+                                  );
+                                  print(response);
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
@@ -182,8 +178,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-
-                            // Add other content here
                           ],
                         ),
                       ),
@@ -212,86 +206,82 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    activateSpeechRecognizer();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: DefaultTabController(
-        length: 2,
-        child: TabBar(
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              return Colors.transparent;
-            },
-          ),
-          padding: const EdgeInsets.only(bottom: 16),
-          controller: _tabController,
-          onTap: (val) {
-            setState(() {});
-          },
-          dividerHeight: 0,
-          splashBorderRadius: BorderRadius.zero,
-          dividerColor: Colors.transparent,
-          unselectedLabelColor: Colors.black,
-          labelColor: Colors.white,
-          labelStyle: const TextStyle(
-            fontSize: 16,
-            fontFamily: 'DMSans',
-            fontWeight: FontWeight.w500,
-          ),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-          indicatorSize: TabBarIndicatorSize.label,
-          indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(35),
-            color: secondaryColor,
-          ),
-          tabs: const [
-            Tab(
-              child: Center(
-                child: Text(
-                  "Record",
+      bottomNavigationBar: (selectedNotebook == null)
+          ? const SizedBox(
+              height: 0,
+            )
+          : DefaultTabController(
+              length: 2,
+              child: TabBar(
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
+                    return Colors.transparent;
+                  },
                 ),
+                padding: const EdgeInsets.only(bottom: 16),
+                controller: _tabController,
+                onTap: (val) {
+                  setState(() {});
+                },
+                dividerHeight: 0,
+                splashBorderRadius: BorderRadius.zero,
+                dividerColor: Colors.transparent,
+                unselectedLabelColor: Colors.black,
+                labelColor: Colors.white,
+                labelStyle: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'DMSans',
+                  fontWeight: FontWeight.w500,
+                ),
+                labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(35),
+                  color: secondaryColor,
+                ),
+                tabs: const [
+                  Tab(
+                    child: Center(
+                      child: Text(
+                        "Record",
+                      ),
+                    ),
+                  ),
+                  Tab(
+                    child: Center(
+                      child: Text(
+                        "Notes",
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Tab(
-              child: Center(
-                child: Text(
-                  "Notes",
-                ),
+      floatingActionButton: (selectedNotebook == null)
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  toggleListening();
+                });
+              },
+              backgroundColor: accentColor,
+              enableFeedback: true,
+              child: const Icon(
+                Icons.mic,
+                color: Colors.white,
               ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: (_tabController?.index == 0) ? FloatingActionButton(
-        onPressed: () async {
-          if (!isListening) {
-            final model = await ModelLoader().loadFromAssets(
-                'assets/models/vosk-model-small-en-us-0.15.zip');
-            final vosk = VoskFlutterPlugin.instance();
-
-            final recognizer = await vosk.createRecognizer(
-              model: model as Model,
-              sampleRate: 1600,
-            );
-            final speechService = await vosk.initSpeechService(recognizer);
-            speechService.onPartial().forEach((partial) => print(partial));
-            speechService.onResult().forEach((result) => print(result));
-            await speechService.start();
-          } else {
-            setState(() {
-              isListening = false;
-              print(isListening);
-            });
-          }
-          setState(() {});
-        },
-        backgroundColor: accentColor,
-        enableFeedback: true,
-        child: const Icon(
-          Icons.mic,
-          color: Colors.white,
-        ),
-      ) : null,
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.125),
@@ -308,8 +298,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   showTopModalSheet(context);
                   HapticFeedback.selectionClick();
                 },
-                child: const Text(
-                  "• Amoeba Research",
+                child: Text(
+                  (selectedNotebook == null)
+                      ? "Your Notebooks"
+                      : "• Amoeba Research",
                   style: SubHeadingTextStyle,
                 ),
               ),
@@ -335,13 +327,40 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: TabBarView(
-          controller: _tabController,
-          children: const [
-            Records(),
-            Notes(),
-          ],
-        ),
+        child: (selectedNotebook == null)
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: Image(
+                        image: const AssetImage(
+                          "assets/notebook.png",
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.6,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    const Text(
+                      "You haven't created any notebook yet :(",
+                      style: BasicTextStyle,
+                    ),
+                  ],
+                ),
+              )
+            : TabBarView(
+                controller: _tabController,
+                children: [
+                  Records(
+                    notebook: selectedNotebook,
+                  ),
+                  Notes(notebook: selectedNotebook),
+                  // Notes(),
+                ],
+              ),
       ),
     );
   }

@@ -47,7 +47,6 @@ class LandingPage extends StatelessWidget {
                 ),
               );
             }
-
             HapticFeedback.selectionClick();
           },
           height: 50,
