@@ -7,6 +7,7 @@ const Color bgColor = Colors.white;
 const Color secondaryColor = Color(0xFF21394B);
 
 var UserData;
+var NotebookData;
 
 const ButtonTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
@@ -21,6 +22,11 @@ const BasicTextStyle = TextStyle(
 const BasicTextStyle2 = TextStyle(
   fontWeight: FontWeight.w400,
   color: Colors.white,
+);
+
+const BasicTextStyle3 = TextStyle(
+  fontWeight: FontWeight.w400,
+  color: Colors.black38,
 );
 
 const SubHeadingTextStyle = TextStyle(

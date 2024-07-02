@@ -90,8 +90,8 @@ refreshData() async {
   UserData = response[1];
 }
 
-Future createNotebook(records, research, userId) async {
-  final url = Uri.parse('http://10.0.2.2:3333/api/create');
+Future createNotebook(records, research, name) async {
+  final url = Uri.parse('http://10.0.2.2:3333/api/notebook/create');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');
@@ -104,7 +104,7 @@ Future createNotebook(records, research, userId) async {
   final body = jsonEncode({
     "records": records,
     "research": research,
-    'userId': userId
+    "name": name
   });
 
   final response = await http.post(
@@ -121,6 +121,29 @@ Future getNotebookData(
     ) async {
   final url =
   Uri.parse('http://10.0.2.2:3333/api/notebook/notebooks');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var cookie = prefs.getString('jwt');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'Cookie': cookie.toString()
+  };
+
+  final response = await http.get(
+    url,
+    headers: headers,
+  );
+
+  final responseBody = jsonDecode(response.body);
+  return [response.statusCode, responseBody];
+}
+
+Future getNotebookById(
+    notebookId
+    ) async {
+  final url =
+  Uri.parse('http://10.0.2.2:3333/api/notebook/notebooks/$notebookId');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');

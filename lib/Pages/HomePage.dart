@@ -1,11 +1,14 @@
-// ignore_for_file: file_names, avoid_print, prefer_typing_uninitialized_variables
+// ignore_for_file: file_names, avoid_print, prefer_typing_uninitialized_variables, use_build_context_synchronously, unused_field
 
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speech/flutter_speech.dart';
+import 'package:lablogic/AdditionalFiles/TextForm.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
+import 'package:lablogic/AdditionalFiles/rounded_button.dart';
 import 'package:lablogic/Pages/Notes.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
@@ -22,6 +25,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
+
+  TextEditingController nameController = TextEditingController();
 
   var selectedNotebook;
 
@@ -59,6 +64,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
     setState(() {
       _isListening = !_isListening;
+    });
+  }
+
+  Timer? _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      getUserData();
+      setState(() {});
     });
   }
 
@@ -121,25 +135,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   MediaQuery.of(context).size.width * 0.025,
                               children: UserData['notebooks']
                                   .map<Widget>(
-                                    (e) => Container(
-                                      margin: EdgeInsets.only(
-                                        bottom:
-                                            MediaQuery.of(context).size.width *
-                                                0.025,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Color(
-                                          (math.Random().nextDouble() *
-                                                  0xFFFFFF)
-                                              .toInt(),
-                                        ).withOpacity(1.0),
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          bottomRight: Radius.circular(8),
+                                    (book) => GestureDetector(
+                                      onTap: () async {
+                                        var response = await getNotebookById(
+                                            selectedNotebook['_id']);
+                                        setState(() {
+                                          selectedNotebook = book;
+                                          NotebookData = response[1];
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.025,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Color(
+                                            (math.Random().nextDouble() *
+                                                    0xFFFFFF)
+                                                .toInt(),
+                                          ).withOpacity(1.0),
+                                          borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                        ),
+                                        height: 100,
+                                        width: 80,
+                                        child: Center(
+                                          child: Text(
+                                            book['name'],
+                                            style: ButtonTextStyle,
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ),
-                                      height: 100,
-                                      width: 80,
                                     ),
                                   )
                                   .toList(),
@@ -149,13 +182,85 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               alignment: Alignment.bottomRight,
                               child: FloatingActionButton(
                                 backgroundColor: accentColor,
-                                onPressed: () async {
-                                  var response = await createNotebook(
-                                    [],
-                                    "Not enough records to generate Research",
-                                    UserData['_id'],
-                                  );
-                                  print(response);
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          content: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.2,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  "Got a name in mind?",
+                                                  style: SubHeadingTextStyle,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                TextForm(
+                                                  hintText: "Notebook 1",
+                                                  controller: nameController,
+                                                  keyboard: TextInputType.name,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                RoundedButton(
+                                                  onPressed: () async {
+                                                    HapticFeedback
+                                                        .selectionClick();
+                                                    if (nameController
+                                                        .text.isNotEmpty) {
+                                                      var response =
+                                                          await createNotebook(
+                                                        [],
+                                                        "Not enough records to make a research report yet.",
+                                                        nameController.text,
+                                                      );
+                                                      print(response);
+                                                      if (response[0] == 200 ||
+                                                          response[0] == 201) {
+                                                        Navigator.pop(context);
+                                                      } else {
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 2),
+                                                            content: Text(
+                                                              response[1],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    }
+                                                  },
+                                                  height: 50,
+                                                  width: double.maxFinite,
+                                                  child: const Text(
+                                                    "Create",
+                                                    style: ButtonTextStyle,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
                                 },
                                 child: const Icon(
                                   Icons.add,
@@ -208,6 +313,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _startTimer();
     _tabController = TabController(length: 2, vsync: this);
     activateSpeechRecognizer();
   }
@@ -240,7 +346,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 labelColor: Colors.white,
                 labelStyle: const TextStyle(
                   fontSize: 16,
-                  fontFamily: 'DMSans',
                   fontWeight: FontWeight.w500,
                 ),
                 labelPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -275,11 +380,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   toggleListening();
                 });
               },
-              backgroundColor: accentColor,
+              backgroundColor: (_isListening) ? Colors.red : accentColor,
               enableFeedback: true,
-              child: const Icon(
-                Icons.mic,
-                color: Colors.white,
+              child: Icon(
+                (_isListening) ? Icons.mic_off : Icons.mic,
+                color: (_isListening) ? Colors.black38 : Colors.white,
               ),
             ),
       appBar: PreferredSize(
@@ -301,7 +406,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: Text(
                   (selectedNotebook == null)
                       ? "Your Notebooks"
-                      : "• Amoeba Research",
+                      : "• ${selectedNotebook['name']}",
                   style: SubHeadingTextStyle,
                 ),
               ),
@@ -353,11 +458,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               )
             : TabBarView(
                 controller: _tabController,
-                children: [
-                  Records(
-                    notebook: selectedNotebook,
-                  ),
-                  Notes(notebook: selectedNotebook),
+                children: const [
+                  Records(),
+                  Notes(),
                   // Notes(),
                 ],
               ),

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
 
 class Records extends StatefulWidget {
-  final notebook;
-  const Records({super.key, required this.notebook});
+  const Records({super.key});
 
   @override
   State<Records> createState() => _RecordsState();
@@ -14,8 +13,36 @@ class Records extends StatefulWidget {
 class _RecordsState extends State<Records> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-            itemCount: 2,
+    return (NotebookData['records'].length == 0)
+        ? Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  child: Image(
+                    image: const AssetImage(
+                      "assets/records.png",
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                const Text(
+                  "No records found, try recording something",
+                  style: BasicTextStyle,
+                ),
+                const Text(
+                  "psst, Press the mic icon",
+                  style: BasicTextStyle3,
+                )
+              ],
+            ),
+          )
+        : ListView.builder(
+            itemCount: NotebookData['records'].length,
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 children: [
@@ -23,20 +50,25 @@ class _RecordsState extends State<Records> {
                     color: Colors.white,
                     height: 80,
                     width: double.maxFinite,
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Center(
                           child: Text(
-                            "The reaction evolved flame red in colour and rats were unconscious with the flame",
+                            NotebookData['records'][index]['message']
+                                .toString(),
                             style: SpeechTextStyle,
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Icon(
-                            Icons.cloud_done_outlined,
-                            color: Colors.green,
+                            NotebookData['records'][index]['status']
+                                ? Icons.cloud_done_outlined
+                                : Icons.cloud_off_outlined,
+                            color: NotebookData['records'][index]['status']
+                                ? Colors.green
+                                : Colors.red,
                           ),
                         ),
                       ],
