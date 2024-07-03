@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lablogic/AdditionalFiles/constants.dart';
 import 'package:lablogic/AdditionalFiles/rounded_button.dart';
+import 'package:lablogic/Pages/SubPages/privacy_loader.dart';
 import 'package:lablogic/utils/utilities.dart';
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Pages/HomePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -35,7 +35,7 @@ class LandingPage extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).pushReplacement(
                 CupertinoPageRoute<bool>(
                   fullscreenDialog: false,
-                  builder: (BuildContext context) => const HomePage(),
+                  builder: (BuildContext context) => const PrivacyLoader(),
                 ),
               );
             } else {

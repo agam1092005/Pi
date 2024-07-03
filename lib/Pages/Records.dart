@@ -37,7 +37,7 @@ class _RecordsState extends State<Records> {
                 const Text(
                   "psst, Press the mic icon",
                   style: BasicTextStyle3,
-                )
+                ),
               ],
             ),
           )
