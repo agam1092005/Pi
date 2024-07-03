@@ -137,8 +137,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   .map<Widget>(
                                     (book) => GestureDetector(
                                       onTap: () async {
-                                        var response = await getNotebookById(
-                                            book['_id']);
+                                        var response =
+                                            await getNotebookById(book['_id']);
                                         setState(() {
                                           selectedNotebook = book;
                                           NotebookData = response[1];
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         height: 100,
-                                        width: 80,
+                                        width: 75,
                                         child: Center(
                                           child: Text(
                                             book['name'],
@@ -195,13 +195,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
-                                                0.2,
+                                                0.4,
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Text(
-                                                  "Got a name in mind?",
+                                                  "Your Notebook",
                                                   style: SubHeadingTextStyle,
                                                 ),
                                                 const SizedBox(
@@ -211,6 +211,86 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   hintText: "Notebook 1",
                                                   controller: nameController,
                                                   keyboard: TextInputType.name,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                SizedBox(
+                                                  height: 150,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(
+                                                              (math.Random().nextDouble() *
+                                                                  0xFFFFFF)
+                                                                  .toInt(),
+                                                            ).withOpacity(1.0),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                                 const SizedBox(
                                                   height: 20,
@@ -227,10 +307,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         "Not enough records to make a research report yet.",
                                                         nameController.text,
                                                       );
-                                                      print(response);
                                                       if (response[0] == 200 ||
                                                           response[0] == 201) {
                                                         Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        nameController.clear();
+                                                        await refreshData();
                                                       } else {
                                                         Navigator.pop(context);
                                                         Navigator.pop(context);
