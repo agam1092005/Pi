@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../AdditionalFiles/constants.dart';
 import '../HomePage.dart';
 
@@ -15,7 +16,7 @@ class PrivacyLoader extends StatefulWidget {
 class _PrivacyLoaderState extends State<PrivacyLoader> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 4), () {
       Navigator.of(context, rootNavigator: true).pushReplacement(
         CupertinoPageRoute<bool>(
           fullscreenDialog: false,
@@ -43,9 +44,6 @@ class _PrivacyLoaderState extends State<PrivacyLoader> {
                 width: MediaQuery.of(context).size.width * 0.8,
               ),
             ),
-            const SizedBox(
-              height: 40,
-            ),
             const Text(
               "Making your account secure",
               style: BasicTextStyle,
@@ -53,6 +51,13 @@ class _PrivacyLoaderState extends State<PrivacyLoader> {
             const Text(
               "Using end-to-end encryption to store your data",
               style: BasicTextStyle3,
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            const SpinKitPulse(
+              color: accentColor,
+              size: 25,
             ),
           ],
         ),

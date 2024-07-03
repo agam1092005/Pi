@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element, non_constant_identifier_names, duplicate_ignore, non_constant_identifier_names
+// ignore_for_file: unused_element, non_constant_identifier_names, duplicate_ignore, non_constant_identifier_names, constant_identifier_names
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -155,6 +155,28 @@ Future getNotebookById(
   };
 
   final response = await http.get(
+    url,
+    headers: headers,
+  );
+
+  final responseBody = jsonDecode(response.body);
+  return [response.statusCode, responseBody];
+}
+
+Future deleteAccount(
+    ) async {
+  final url =
+  Uri.parse('$Backend_Url/api/auth/user');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var cookie = prefs.getString('jwt');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'Cookie': cookie.toString()
+  };
+
+  final response = await http.delete(
     url,
     headers: headers,
   );

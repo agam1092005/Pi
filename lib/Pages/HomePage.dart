@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     (book) => GestureDetector(
                                       onTap: () async {
                                         var response = await getNotebookById(
-                                            selectedNotebook['_id']);
+                                            book['_id']);
                                         setState(() {
                                           selectedNotebook = book;
                                           NotebookData = response[1];
