@@ -5,10 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../AdditionalFiles/constants.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
+const Backend_Url = "https://lablogic-backend.onrender.com";
+// http://10.0.2.2:3333
 
 Future<GoogleSignInAccount> Glogin() async {
   final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -30,7 +31,7 @@ Future<GoogleSignInAccount> Glogin() async {
 
 Map<String, String> jwt = {};
 Future verifyUser(email) async {
-  final url = Uri.parse('http://10.0.2.2:3333/api/auth/verify');
+  final url = Uri.parse('$Backend_Url/api/auth/verify');
 
   final headers = {
     'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ void updateCookie(http.Response response) async {
 Future getUserData(
     ) async {
   final url =
-  Uri.parse('http://10.0.2.2:3333/api/auth/user');
+  Uri.parse('$Backend_Url/api/auth/user');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');
@@ -91,7 +92,7 @@ refreshData() async {
 }
 
 Future createNotebook(records, research, name) async {
-  final url = Uri.parse('http://10.0.2.2:3333/api/notebook/create');
+  final url = Uri.parse('$Backend_Url/api/notebook/create');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');
@@ -120,7 +121,7 @@ Future createNotebook(records, research, name) async {
 Future getNotebookData(
     ) async {
   final url =
-  Uri.parse('http://10.0.2.2:3333/api/notebook/notebooks');
+  Uri.parse('$Backend_Url/api/notebook/notebooks');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');
@@ -143,7 +144,7 @@ Future getNotebookById(
     notebookId
     ) async {
   final url =
-  Uri.parse('http://10.0.2.2:3333/api/notebook/notebooks/$notebookId');
+  Uri.parse('$Backend_Url/api/notebook/notebooks/$notebookId');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookie = prefs.getString('jwt');
