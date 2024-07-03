@@ -26,8 +26,10 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
     await FlutterDisplayMode.setHighRefreshRate();
     await refreshData();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    jwt = prefs.getString('jwt');
-    biometrics = prefs.getBool('bio')!;
+    setState(() {
+      jwt = prefs.getString('jwt');
+      biometrics = prefs.getBool('bio')!;
+    });
   }
 
   late final LocalAuthentication auth;
@@ -35,7 +37,7 @@ class _SplashStartScreenState extends State<SplashStartScreen> {
   Future<void> _authentication() async {
     try {
       bool authenticated = await auth.authenticate(
-        localizedReason: '',
+        localizedReason: 'Unlock Pi',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,

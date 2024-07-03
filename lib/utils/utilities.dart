@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../AdditionalFiles/constants.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
-const Backend_Url = "https://lablogic-backend.onrender.com";
-// http://10.0.2.2:3333
+// const Backend_Url = "https://lablogic-backend.onrender.com";
+const Backend_Url = "http://10.0.2.2:3333";
 
 Future<GoogleSignInAccount> Glogin() async {
   final GoogleSignIn googleSignIn = GoogleSignIn(
