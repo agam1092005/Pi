@@ -13,7 +13,6 @@ import 'package:lablogic/Pages/Notes.dart';
 import 'package:lablogic/Pages/Profile.dart';
 import 'package:lablogic/Pages/Records.dart';
 import 'dart:math' as math;
-
 import '../utils/utilities.dart';
 
 class HomePage extends StatefulWidget {

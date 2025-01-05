@@ -1,0 +1,6 @@
+framework module flutter_speech {
+  umbrella header "flutter_speech-umbrella.h"
+
+  export *
+  module * { export * }
+}

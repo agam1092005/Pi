@@ -1,0 +1,5 @@
+ extern const unsigned char flutter_speechVersionString[];
+ extern const double flutter_speechVersionNumber;
+
+ const unsigned char flutter_speechVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:flutter_speech  PROJECT:Pods-1" "\n";
+ const double flutter_speechVersionNumber __attribute__ ((used)) = (double)1.;
